@@ -57,55 +57,9 @@
 
 ## 签名
 
-- go
+支持多种语言，如：
 
-  ```go
-  // GenDataSum Generating data summaries.
-  func (r *Rsa) GenDataSum(data []byte) (hashed []byte, err error) {
-  	// MD5 and SHA1 are not supported as they are not secure.
-  	switch r.cryptoHash {
-  	case crypto.SHA224:
-  		h := sha256.Sum224(data)
-  		hashed = h[:]
-  	case crypto.SHA256:
-  		h := sha256.Sum256(data)
-  		hashed = h[:]
-  	case crypto.SHA384:
-  		h := sha512.Sum384(data)
-  		hashed = h[:]
-  	case crypto.SHA512:
-  		h := sha512.Sum512(data)
-  		hashed = h[:]
-  	default:
-  		err = errors.New("error hash crypto")
-  	}
-  	return
-  }
-  
-  // RsaSignByHash signs using private key in PEM format.
-  func (r *Rsa) RsaSignByHash(hashed []byte) (signData []byte, err error) {
-  	if nil == r.priKey {
-  		return nil, errors.New("private key is nil")
-  	}
-  	block, _ := pem.Decode(r.priKey)
-  	if block == nil {
-  		return nil, errors.New("decode private key error")
-  	}
-  
-  	var privateKey interface{}
-  	if PKCS8 == r.keyFmt {
-  		privateKey, err = x509.ParsePKCS8PrivateKey(block.Bytes)
-  	} else {
-  		privateKey, err = x509.ParsePKCS1PrivateKey(block.Bytes)
-  	}
-  	if privateKey == nil || err != nil {
-  		return nil, err
-  	}
-  
-  	signData, err = rsa.SignPKCS1v15(rand.Reader, privateKey.(*rsa.PrivateKey), r.cryptoHash, hashed)
-  	return
-  }
-  ```
+- go
 
 - java
 
@@ -113,51 +67,10 @@
 
 ## 验签
 
+支持多种语言，如：
+
 - go
-
-  ```go
-  func (r *Rsa) RsaVerifySign(data, sig []byte) error {
-  	if nil == r.pubKey {
-  		return errors.New("public key is nil")
-  	}
-  	block, _ := pem.Decode(r.pubKey)
-  	if block == nil {
-  		return errors.New("decode public key error")
-  	}
-  
-  	var pub interface{}
-  	err := errors.New("")
-  	if PKCS8 == r.keyFmt {
-  		pub, err = x509.ParsePKIXPublicKey(block.Bytes)
-  	} else {
-  		pub, err = x509.ParsePKCS1PublicKey(block.Bytes)
-  	}
-  	if err != nil {
-  		return err
-  	}
-  
-  	// SHA1 and MD5 are not supported as they are not secure.
-  	var hashed []byte
-  	switch r.cryptoHash {
-  	case crypto.SHA224:
-  		h := sha256.Sum224(data)
-  		hashed = h[:]
-  	case crypto.SHA256:
-  		h := sha256.Sum256(data)
-  		hashed = h[:]
-  	case crypto.SHA384:
-  		h := sha512.Sum384(data)
-  		hashed = h[:]
-  	case crypto.SHA512:
-  		h := sha512.Sum512(data)
-  		hashed = h[:]
-  	}
-  	return rsa.VerifyPKCS1v15(pub.(*rsa.PublicKey), r.cryptoHash, hashed, sig)
-  }
-  ```
-
 - java
-
 - php
 
 ## 完整代码
