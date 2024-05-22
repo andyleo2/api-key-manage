@@ -12,7 +12,7 @@
 
 客户可以通过多种方式生成公私钥对，如：
 
-- **在线生成**；
+- [在线生成](https://www.metools.info/code/c80.html)；
 - OpenSSL生成；
 - 本地工具生成；
 
