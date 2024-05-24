@@ -65,6 +65,8 @@
 
 - [php](https://github.com/andyleo2/api-key-manage/blob/main/rsa/php/Rsa.php#L62)
 
+- [python](https://github.com/andyleo2/api-key-manage/blob/main/rsa/python/rsa.py#L67)
+
 ## 验签
 
 支持多种语言，如：
@@ -72,9 +74,11 @@
 - [go](https://github.com/andyleo2/api-key-manage/blob/main/rsa/go/rsa.go#L149)
 - java
 - [php](https://github.com/andyleo2/api-key-manage/blob/main/rsa/php/Rsa.php#L72)
+- [python](https://github.com/andyleo2/api-key-manage/blob/main/rsa/python/rsa.py#L86)
 
 ## 完整代码
 
 - [go](https://github.com/andyleo2/api-key-manage/tree/main/rsa/go)
 - java
 - [php](https://github.com/andyleo2/api-key-manage/tree/main/rsa/php)
+- [python](https://github.com/andyleo2/api-key-manage/tree/main/rsa/python)
