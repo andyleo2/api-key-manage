@@ -187,6 +187,32 @@ func (r *Rsa) RsaVerifySign(data, sig []byte) error {
 
 func main() {
 	var r Rsa
+	hash := crypto.SHA256
+	keyFmt := PKCS8
+	priKey := "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDq088dwHk19Jnk\nyDZuIUKt+52ewfQ+IO7Cz1CeCBC5cDI5ZfxHg3hzkviJQEsrn84vfYTjAqAM6zYR\nKtTD6TT2XQ4HDFsOPMg81k4BwTFPY57YQYEyx8aCxZUe6IncmI38frX+uYmYWgRK\nMDmj+PORKzITGmShpOiX0mJ0ZH4FOBAGRQBWePGH3fM/TtwbQbMSGTxJsSWOEnBZ\nwKqrUtm0s8v/KoL4adkMBnl8PAGgZ6EHjyZva4KaKZO2zHtDeb5Sv9e1qqgvKwRL\nVTgsEPYliKSiFcTESQLoTz6kgwCakOSfMfaLgWoE0BtOEicxtME0LV6p7o8E5MVj\nUbsfN5bDAgMBAAECggEADMxfdj57vLTolZ9TLBxpnxmJZSd//B+Hs8a1x5nRQ4dk\nYrF2wZ+zjGT/C7KdMN2kUKf1eqPgJ47C4xujqKEeBFayVtsAXshxnLM3YYFvLRBV\nDhyVLI3WeWEdt/yyKtDbst5luozP0tBbzylNXZefZWg7x0PB0UzaFRA1J8/O+Hy+\nKjRPRlBEYuB7UNJOP1VBmhCYKNzWW3s19gEChToza/bY+ekz6j4fqAyHcKY4FgQ7\ncNCIXP5OeerYqGF0/UMtm9N0UiY5j1H+YKS8OmH+Xyxkov0uFltrK3YcqK40EKNW\n69VPZR3oALAh3WPuzAWvM8WlAwFGNbun9uhutTG05QKBgQD2alyXTQdUPmkXNuZC\n5z4SVN6Mx2AC+K0VXLwS6LPKONYLYAR8NF0A0gPzKaiOTPCnacu/V0EjGWhZClZi\nVto2+hGkt3J3fJSUj6vzAdL+F3CYj1eC+DqiVKw2MqqqHe3n5M6CrmS1vBRZDcwb\ns8geD/lRxVow21B6hZ2+n76sbwKBgQDz9g+auHaqNqDQ/16GC37TFuyqpn/fjzot\nYLEU1aVz1idKwzwEreaaXIS9yKfrep9gjr/8TSqpc8hwU+P6y2EZi3eohwmvH6Hw\nBBDMJoj6rtjPcn99qhJB7wKfaZnJWjeVKWpgX8vQX2t7hXCFXHeFctCAbd7U2bwF\nNVRO2g9M7QKBgQDo5gJ5Zm6E6y/8pwDfPxxlyx1FRbOzW0KMLEf+Pz6e5TU5LxlO\nI1e7zMO68ibDyGi0csQGJvwDpqH/dkvLSneY+qXuXwyrbm4oM9q7JYA8c/8R0nlN\n6jvQ7eKOnzi67OrNAG9HCHlbY1aADRBbJoMAFuz4omTqRH8+Lke3wdg/tQKBgFkY\nHa7FeyDCfoyVFnIhtJlmn9vanoyIhBiaXVFcjOX26baWAk87KyJoc1nT8+89gwMC\nXv7HN7NWw3ayTGoE6Fsp4fM8Db9U8BD1iyTjVdcnD6sDB6he+ff2T6DkMfOk7POe\ngmjb01Uv49Licqthj4y+14JvnZdiRRYp2bZKUJgpAoGBAPM0shMCH8oBNBBqStZY\nnWcGrfpn3H9OlWbNLYm1MfHt8Ts7YUo/KjJdySklF3mUaJORkhWqcTpjeQ+dINvF\ndoMPBbyBIr6CHeCMrpMOOJqhKXX/53HlLYjnedr2MrRsgZvl510svPW6OK+keynK\nKhIIYEk5zRJYwQ9IBa7u5q7X\n-----END PRIVATE KEY-----\n"
+
+	r.SetPriKey([]byte(priKey))
+	r.SetCryptoHash(hash)
+	r.SetKeyFmt(keyFmt)
+
+	// Message to be signed
+	orgData := "orderNum:W00000025,amount:66,address:TQggA8Gw7WaBi5ZmcCBdxtyjjbtHvGf9bN,userId:Ta123456"
+	message := []byte(orgData)
+	//fmt.Printf("\nMessage:%s\n", hex.EncodeToString(message))
+	hashed, err := r.GenDataSum(message)
+	fmt.Printf("\n-------Data Hash:----------\n%s\n", hex.EncodeToString(hashed))
+
+	// The message is signed using the private key
+	signature, err := r.RsaSignByHash(hashed)
+	if err != nil {
+		fmt.Println("Error signing message:", err)
+		return
+	}
+	fmt.Printf("\n-------Signature:----------\n%s\n", base64.StdEncoding.EncodeToString(signature))
+}
+
+func main1() {
+	var r Rsa
 	keyBits := 2048
 	hash := crypto.SHA256
 	keyFmt := PKCS1
